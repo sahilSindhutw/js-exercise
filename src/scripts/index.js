@@ -1,19 +1,26 @@
-import { TotalBoxCount,BoxClasses,StatusOptions } from "./constants/Box.js";
+import { BoxClasses, StatusOptions, TotalBoxCount } from "./constants/Box.js";
 import appendElements from "./utils/appendElements.js";
-import createElements from "./utils/createElements.js";
+import { createElements,createElement } from "./utils/createElements.js";
 
 document.addEventListener('DOMContentLoaded', function() {
     const container = document.getElementById('container');
-    createChildBoxes(container, TotalBoxCount);
+    const inputField = createElement({element:'input',className:'text-input'});
+
+    createChildBoxes({container,count:TotalBoxCount,className:BoxClasses.default});
     addContainerClickListener(container);
+
+    inputField.value = TotalBoxCount; 
+    container.before(inputField);
+
+    inputField.addEventListener('change', (e)=>handleCountBoxChange(e.target.value));
 });
 
-function createChildBoxes(container,count,element = 'div', className = BoxClasses.default) {
-    const boxElements = createElements({count,element,className});
-    appendElements({container,childList:boxElements})
+export function createChildBoxes({container, count, className, startingIndex}) {
+    const boxElements = createElements({count, element : 'div', className, startingIndex});
+    appendElements({container, childList: boxElements});
 }
 
-function addContainerClickListener(container) {
+export function addContainerClickListener(container) {
     container.addEventListener('click', function(event) {
         if (event.target.classList.contains(BoxClasses.default)) {
             handleBoxClick(event.target);
@@ -21,23 +28,35 @@ function addContainerClickListener(container) {
     });
 }
 
-function handleBoxClick(box) {
+export function handleCountBoxChange(value) {
+    const desiredCount = parseInt(value) || 0;
+    const currentCount = container.querySelectorAll('.' + BoxClasses.default).length;
+
+    if(desiredCount > currentCount) {
+        createChildBoxes({container, count:desiredCount - currentCount,className:BoxClasses.default,startingIndex:currentCount});
+    } else if(desiredCount < currentCount) {
+        for(let i = currentCount; i > desiredCount; i--) {
+            container.removeChild(container.lastChild);
+        }
+    }
+};
+
+export function handleBoxClick(box) {
     const index = parseInt(box.dataset.index);
-    box = updateClass(box);
-    const boxStatus = box.classList.contains(BoxClasses.active) ? StatusOptions.on : StatusOptions.off
-    handleMessages(index,boxStatus)
+     updateBoxClass(box);
+    const boxStatus = box.classList.contains(BoxClasses.active) ? StatusOptions.on : StatusOptions.off;
+    handleMessages(index, boxStatus);
 }
 
+export function handleMessages(index, status){
+    console.log(`Turning ${status} ${index+1}`);
+}
 
-function updateClass(box){
+export function updateBoxClass(box){
     if (box.classList.contains(BoxClasses.active)) {
-        box.classList.remove('active')
+        box.classList.remove(BoxClasses.active);
     } else {
-        box.classList.add('active')
+        box.classList.add(BoxClasses.active);
     }
     return box;
-}
-
-function handleMessages(index,status){
-    console.log(`Turning ${status} ${index+1}`)
 }
