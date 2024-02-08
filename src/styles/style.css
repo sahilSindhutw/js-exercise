@@ -3,7 +3,7 @@
     --box-bg-color-active: #0000FF; /* Blue */
 }
 
-#cactivetainer {
+#container {
     display: flex;
     flex-wrap: wrap;
 }
