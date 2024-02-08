@@ -10,7 +10,7 @@ Before you can run this project, make sure you have [Node.js](https://nodejs.org
 
 ```bash
 # Clone the repository (or download and extract it if you're not using Git)
-git clone https://github.com/your-username/js-exercise.git
+git clone https://github.com/sahilSindhutw/js-exercise
 
 # Navigate to the project directory
 cd js-exercise
