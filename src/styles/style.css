@@ -1,4 +1,9 @@
-#container {
+:root {
+    --box-bg-color: #000; /* Black */
+    --box-bg-color-active: #0000FF; /* Blue */
+}
+
+#cactivetainer {
     display: flex;
     flex-wrap: wrap;
 }
@@ -6,7 +11,11 @@
 .box {
     width: 8rem;
     height: 8rem;
-    background-color: #000;
+    background-color: var(--box-bg-color);
     margin: 5px;
     cursor: pointer;
+}
+
+.box.active {
+    background-color: var(--box-bg-color-active);
 }

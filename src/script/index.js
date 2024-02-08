@@ -8,7 +8,10 @@ const messagingIndexes = {
     [statusOptions.off]: [3],
 }
 
-const BoxClass = 'box';
+const BoxClass = {
+    default: 'box',
+    active: 'active'
+}
 
 document.addEventListener('DOMContentLoaded', function() {
     const container = document.getElementById('container');
@@ -16,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
     addContainerClickListener(container);
 });
 
-function createChildBoxes(container, count ,element = 'div', className = BoxClass) {
+function createChildBoxes(container, count ,element = 'div', className = BoxClass.default) {
     for (let i = 0; i < count; i++) {
         const childDiv = document.createElement(element);
         childDiv.classList.add(className);
@@ -28,7 +31,7 @@ function createChildBoxes(container, count ,element = 'div', className = BoxClas
 
 function addContainerClickListener(container) {
     container.addEventListener('click', function(event) {
-        if (event.target.classList.contains(BoxClass)) {
+        if (event.target.classList.contains(BoxClass.default)) {
             handleBoxClick(event.target);
         }
     });
@@ -37,7 +40,7 @@ function addContainerClickListener(container) {
 function handleBoxClick(box) {
     const index = parseInt(box.dataset.index);
     box = toggleStatus(box);
-    box = toggleBackgroundColor(box);
+    box = updateClass(box);
     const boxStatus = box.dataset.status;
     handleMessages(index,boxStatus)
 }
@@ -51,11 +54,11 @@ function toggleStatus(box){
     return box;
 }
 
-function toggleBackgroundColor(box){
+function updateClass(box){
     if (box.dataset.status === statusOptions.off) {
-        box.style.backgroundColor = 'black';
+        box.classList.remove('active')
     } else {
-        box.style.backgroundColor = 'blue';
+        box.classList.add('active')
     }
     return box;
 }
